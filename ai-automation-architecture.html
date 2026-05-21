@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Automation System — Architecture Diagram</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family:'JetBrains Mono',monospace;
+      background:#020617;
+      min-height:100vh;
+      padding:2rem;
+      color:white;
+    }
+    .container{max-width:1100px;margin:0 auto}
+    .header{margin-bottom:2rem}
+    .header-row{display:flex;align-items:center;gap:1rem;margin-bottom:.5rem}
+    .pulse-dot{width:12px;height:12px;background:#22d3ee;border-radius:50%;animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    h1{font-size:1.5rem;font-weight:700;letter-spacing:-.025em}
+    .subtitle{color:#94a3b8;font-size:.875rem;margin-left:1.75rem}
+    .diagram-container{
+      background:rgba(15,23,42,.5);
+      border-radius:1rem;
+      border:1px solid #1e293b;
+      padding:1.5rem;
+      overflow-x:auto;
+    }
+    svg{width:100%;min-width:950px;display:block}
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:1rem;
+      margin-top:2rem;
+    }
+    .card{
+      background:rgba(15,23,42,.5);
+      border-radius:.75rem;
+      border:1px solid #1e293b;
+      padding:1.25rem;
+    }
+    .card-header{display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem}
+    .card-dot{width:8px;height:8px;border-radius:50%}
+    .card-dot.cyan{background:#22d3ee}
+    .card-dot.emerald{background:#34d399}
+    .card-dot.violet{background:#a78bfa}
+    .card-dot.amber{background:#fbbf24}
+    .card-dot.rose{background:#fb7185}
+    .card h3{font-size:.875rem;font-weight:600}
+    .card ul{list-style:none;color:#94a3b8;font-size:.75rem}
+    .card li{margin-bottom:.375rem}
+    .footer{text-align:center;margin-top:1.5rem;color:#475569;font-size:.75rem}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-row">
+        <div class="pulse-dot"></div>
+        <h1>AI Automation System — Architecture</h1>
+      </div>
+      <p class="subtitle">Powered by Hermes Agent — Production-Grade AI Automation Framework</p>
+    </div>
+
+    <div class="diagram-container">
+      <svg viewBox="0 0 1000 720">
+        <defs>
+          <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+          </marker>
+          <marker id="arrow-cyan" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#22d3ee"/>
+          </marker>
+          <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#34d399"/>
+          </marker>
+          <marker id="arrow-amber" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#fbbf24"/>
+          </marker>
+          <marker id="arrow-rose" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#fb7185"/>
+          </marker>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width=".5"/>
+          </pattern>
+          <linearGradient id="core-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:rgba(6,78,59,.4)"/>
+            <stop offset="100%" style="stop-color:rgba(8,51,68,.4)"/>
+          </linearGradient>
+        </defs>
+
+        <rect width="100%" height="100%" fill="url(#grid)"/>
+
+        <!-- Title in diagram -->
+        <text x="500" y="35" fill="white" font-size="13" font-weight="700" text-anchor="middle">AI Automation System Architecture</text>
+        <text x="500" y="52" fill="#64748b" font-size="9" text-anchor="middle">End-to-end autonomous AI workflow — from input to delivery</text>
+
+        <!-- ════════════════════════════════════ -->
+        <!-- LAYER 1: USER INPUTS (External)     -->
+        <!-- ════════════════════════════════════ -->
+
+        <!-- Background label -->
+        <text x="130" y="78" fill="#475569" font-size="10" font-weight="600" text-anchor="middle">LAYER 1 — USER INPUTS</text>
+
+        <!-- Telegram -->
+        <rect x="30" y="90" width="130" height="55" rx="6" fill="rgba(30,41,59,.5)" stroke="#94a3b8" stroke-width="1.5"/>
+        <text x="95" y="112" fill="white" font-size="11" font-weight="600" text-anchor="middle">📱 Telegram</text>
+        <text x="95" y="128" fill="#94a3b8" font-size="8" text-anchor="middle">Voice / Text / Files</text>
+
+        <!-- Email -->
+        <rect x="185" y="90" width="130" height="55" rx="6" fill="rgba(30,41,59,.5)" stroke="#94a3b8" stroke-width="1.5"/>
+        <text x="250" y="112" fill="white" font-size="11" font-weight="600" text-anchor="middle">📧 Email</text>
+        <text x="250" y="128" fill="#94a3b8" font-size="8" text-anchor="middle">IMAP / SMTP</text>
+
+        <!-- Web / API -->
+        <rect x="340" y="90" width="130" height="55" rx="6" fill="rgba(30,41,59,.5)" stroke="#94a3b8" stroke-width="1.5"/>
+        <text x="405" y="112" fill="white" font-size="11" font-weight="600" text-anchor="middle">🌐 Web / API</text>
+        <text x="405" y="128" fill="#94a3b8" font-size="8" text-anchor="middle">Webhooks / REST</text>
+
+        <!-- Google Sheets -->
+        <rect x="495" y="90" width="130" height="55" rx="6" fill="rgba(30,41,59,.5)" stroke="#94a3b8" stroke-width="1.5"/>
+        <text x="560" y="112" fill="white" font-size="11" font-weight="600" text-anchor="middle">📊 Google Sheets</text>
+        <text x="560" y="128" fill="#94a3b8" font-size="8" text-anchor="middle">Triggers / Webhooks</text>
+
+        <!-- ════════════════════════════════════ -->
+        <!-- ARROWS: Inputs → Hermes Agent       -->
+        <!-- ════════════════════════════════════ -->
+
+        <path d="M 95 145 L 95 175 Q 95 190 110 190 L 480 190 Q 500 190 500 205 L 500 218" fill="none" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow-cyan)"/>
+        <path d="M 250 145 L 250 175 Q 250 185 260 185 L 480 185 Q 500 185 500 195 L 500 218" fill="none" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow-cyan)"/>
+        <path d="M 405 145 L 405 175 Q 405 180 410 180 L 480 180 Q 500 180 500 190 L 500 218" fill="none" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow-cyan)"/>
+        <path d="M 560 145 L 560 218" fill="none" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow-cyan)"/>
+
+        <!-- ════════════════════════════════════ -->
+        <!-- LAYER 2: HERMES AGENT CORE          -->
+        <!-- ════════════════════════════════════ -->
+
+        <text x="500" y="238" fill="#475569" font-size="10" font-weight="600" text-anchor="middle">LAYER 2 — HERMES AGENT CORE (THE BRAIN)</text>
+
+        <!-- Orchestrator Agent -->
+        <rect x="400" y="248" width="200" height="60" rx="8" fill="url(#core-grad)" stroke="#34d399" stroke-width="2"/>
+        <text x="500" y="272" fill="white" font-size="13" font-weight="700" text-anchor="middle">🧠 Hermes Agent</text>
+        <text x="500" y="290" fill="#94a3b8" font-size="9" text-anchor="middle">Orchestrator — Routes & delegates tasks</text>
+
+        <!-- Sub-agents below orchestrator -->
+        <rect x="240" y="340" width="110" height="50" rx="6" fill="rgba(6,78,59,.35)" stroke="#34d399" stroke-width="1.2"/>
+        <text x="295" y="362" fill="white" font-size="10" font-weight="600" text-anchor="middle">🤖 Agent Alpha</text>
+        <text x="295" y="378" fill="#94a3b8" font-size="8" text-anchor="middle">Research / Data</text>
+
+        <rect x="370" y="340" width="110" height="50" rx="6" fill="rgba(6,78,59,.35)" stroke="#34d399" stroke-width="1.2"/>
+        <text x="425" y="362" fill="white" font-size="10" font-weight="600" text-anchor="middle">🤖 Agent Beta</text>
+        <text x="425" y="378" fill="#94a3b8" font-size="8" text-anchor="middle">Processing / ETL</text>
+
+        <rect x="500" y="340" width="110" height="50" rx="6" fill="rgba(6,78,59,.35)" stroke="#34d399" stroke-width="1.2"/>
+        <text x="555" y="362" fill="white" font-size="10" font-weight="600" text-anchor="middle">🤖 Agent Gamma</text>
+        <text x="555" y="378" fill="#94a3b8" font-size="8" text-anchor="middle">Output / Deliver</text>
+
+        <rect x="630" y="340" width="130" height="50" rx="6" fill="rgba(6,78,59,.35)" stroke="#34d399" stroke-width="1.2"/>
+        <text x="695" y="362" fill="white" font-size="10" font-weight="600" text-anchor="middle">⏰ Cron Scheduler</text>
+        <text x="695" y="378" fill="#94a3b8" font-size="8" text-anchor="middle">Auto-run on schedule</text>
+
+        <!-- Arrows: orchestrator → sub-agents -->
+        <path d="M 460 308 L 460 320 Q 460 330 295 330 L 295 338" fill="none" stroke="#34d399" stroke-width="1.2" marker-end="url(#arrow-green)"/>
+        <path d="M 490 308 L 490 338" fill="none" stroke="#34d399" stroke-width="1.2" marker-end="url(#arrow-green)"/>
+        <path d="M 520 308 L 520 320 Q 520 330 555 330 L 555 338" fill="none" stroke="#34d399" stroke-width="1.2" marker-end="url(#arrow-green)"/>
+        <path d="M 550 308 L 550 320 Q 550 330 695 330 L 695 338" fill="none" stroke="#34d399" stroke-width="1.2" marker-end="url(#arrow-green)"/>
+
+        <!-- Watchdog -->
+        <rect x="850" y="340" width="120" height="50" rx="6" fill="rgba(136,19,55,.35)" stroke="#fb7185" stroke-width="1.2"/>
+        <text x="910" y="362" fill="white" font-size="10" font-weight="600" text-anchor="middle">🔍 Watchdog</text>
+        <text x="910" y="378" fill="#94a3b8" font-size="8" text-anchor="middle">Auto-restart on failure</text>
+
+        <!-- ════════════════════════════════════ -->
+        <!-- ARROWS: Agent → AI Models           -->
+        <!-- ════════════════════════════════════ -->
+
+        <path d="M 295 390 L 295 420" fill="none" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#arrow-amber)"/>
+        <path d="M 425 390 L 425 420" fill="none" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#arrow-amber)"/>
+        <path d="M 555 390 L 555 420" fill="none" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#arrow-amber)"/>
+
+        <!-- ════════════════════════════════════ -->
+        <!-- LAYER 3: AI MODELS                   -->
+        <!-- ════════════════════════════════════ -->
+
+        <text x="500" y="440" fill="#475569" font-size="10" font-weight="600" text-anchor="middle">LAYER 3 — AI MODELS (YOUR CHOICE)</text>
+
+        <rect x="200" y="450" width="130" height="50" rx="6" fill="rgba(120,53,15,.3)" stroke="#fbbf24" stroke-width="1.5"/>
+        <text x="265" y="472" fill="white" font-size="11" font-weight="600" text-anchor="middle">OpenAI</text>
+        <text x="265" y="488" fill="#94a3b8" font-size="8" text-anchor="middle">GPT-4o / o3-mini</text>
+
+        <rect x="355" y="450" width="130" height="50" rx="6" fill="rgba(120,53,15,.3)" stroke="#fbbf24" stroke-width="1.5"/>
+        <text x="420" y="472" fill="white" font-size="11" font-weight="600" text-anchor="middle">Anthropic</text>
+        <text x="420" y="488" fill="#94a3b8" font-size="8" text-anchor="middle">Claude Sonnet / Haiku</text>
+
+        <rect x="510" y="450" width="130" height="50" rx="6" fill="rgba(120,53,15,.3)" stroke="#fbbf24" stroke-width="1.5"/>
+        <text x="575" y="472" fill="white" font-size="11" font-weight="600" text-anchor="middle">Ollama (Local)</text>
+        <text x="575" y="488" fill="#94a3b8" font-size="8" text-anchor="middle">Zero API cost</text>
+
+        <rect x="665" y="450" width="130" height="50" rx="6" fill="rgba(120,53,15,.3)" stroke="#fbbf24" stroke-width="1.5"/>
+        <text x="730" y="472" fill="white" font-size="11" font-weight="600" text-anchor="middle">Custom Models</text>
+        <text x="730" y="488" fill="#94a3b8" font-size="8" text-anchor="middle">Fine-tuned / Private</text>
+
+        <!-- ════════════════════════════════════ -->
+        <!-- ARROWS: AI Models → Integrations    -->
+        <!-- ════════════════════════════════════ -->
+
+        <path d="M 265 500 L 265 530 Q 265 545 280 545 L 480 545 Q 500 545 500 555 L 500 568" fill="none" stroke="#a78bfa" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M 420 500 L 420 530 Q 420 540 480 540 Q 500 540 500 550 L 500 568" fill="none" stroke="#a78bfa" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M 575 500 L 575 568" fill="none" stroke="#a78bfa" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M 730 500 L 730 530 Q 730 540 720 540 L 560 540 Q 540 540 540 550 L 540 568" fill="none" stroke="#a78bfa" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+        <!-- ════════════════════════════════════ -->
+        <!-- LAYER 4: INTEGRATIONS / OUTPUT       -->
+        <!-- ════════════════════════════════════ -->
+
+        <text x="500" y="588" fill="#475569" font-size="10" font-weight="600" text-anchor="middle">LAYER 4 — INTEGRATIONS & DELIVERY</text>
+
+        <!-- Google Workspace -->
+        <rect x="30" y="598" width="140" height="55" rx="6" fill="rgba(8,51,68,.35)" stroke="#22d3ee" stroke-width="1.2"/>
+        <text x="100" y="620" fill="white" font-size="10" font-weight="600" text-anchor="middle">Google Workspace</text>
+        <text x="100" y="636" fill="#94a3b8" font-size="8" text-anchor="middle">Drive · Sheets · Docs · Mail</text>
+
+        <!-- Notion + Airtable -->
+        <rect x="195" y="598" width="140" height="55" rx="6" fill="rgba(8,51,68,.35)" stroke="#22d3ee" stroke-width="1.2"/>
+        <text x="265" y="620" fill="white" font-size="10" font-weight="600" text-anchor="middle">Notion + Airtable</text>
+        <text x="265" y="636" fill="#94a3b8" font-size="8" text-anchor="middle">Databases · Records · CRUD</text>
+
+        <!-- Telegram Output -->
+        <rect x="360" y="598" width="140" height="55" rx="6" fill="rgba(8,51,68,.35)" stroke="#22d3ee" stroke-width="1.2"/>
+        <text x="430" y="620" fill="white" font-size="10" font-weight="600" text-anchor="middle">Telegram Delivery</text>
+        <text x="430" y="636" fill="#94a3b8" font-size="8" text-anchor="middle">Reports · Alerts · Voice</text>
+
+        <!-- CRM / Custom -->
+        <rect x="525" y="598" width="140" height="55" rx="6" fill="rgba(8,51,68,.35)" stroke="#22d3ee" stroke-width="1.2"/>
+        <text x="595" y="620" fill="white" font-size="10" font-weight="600" text-anchor="middle">CRM + Custom APIs</text>
+        <text x="595" y="636" fill="#94a3b8" font-size="8" text-anchor="middle">Zoho · HubSpot · REST</text>
+
+        <!-- MCP / Webhooks -->
+        <rect x="690" y="598" width="150" height="55" rx="6" fill="rgba(8,51,68,.35)" stroke="#22d3ee" stroke-width="1.2"/>
+        <text x="765" y="620" fill="white" font-size="10" font-weight="600" text-anchor="middle">MCP Servers</text>
+        <text x="765" y="636" fill="#94a3b8" font-size="8" text-anchor="middle">Any tool · Any API</text>
+
+        <!-- ════════════════════════════════════ -->
+        <!-- LEGEND                               -->
+        <!-- ════════════════════════════════════ -->
+
+        <rect x="850" y="78" width="130" height="148" rx="6" fill="rgba(15,23,42,.6)" stroke="#1e293b" stroke-width="1"/>
+        <text x="862" y="96" fill="white" font-size="10" font-weight="600">Legend</text>
+
+        <rect x="855" y="105" width="14" height="9" rx="2" fill="rgba(30,41,59,.5)" stroke="#94a3b8" stroke-width="1"/>
+        <text x="874" y="113" fill="#94a3b8" font-size="8">User Input</text>
+
+        <rect x="855" y="119" width="14" height="9" rx="2" fill="rgba(6,78,59,.4)" stroke="#34d399" stroke-width="1"/>
+        <text x="874" y="127" fill="#94a3b8" font-size="8">Agent Core</text>
+
+        <rect x="855" y="133" width="14" height="9" rx="2" fill="rgba(120,53,15,.3)" stroke="#fbbf24" stroke-width="1"/>
+        <text x="874" y="141" fill="#94a3b8" font-size="8">AI Models</text>
+
+        <rect x="855" y="147" width="14" height="9" rx="2" fill="rgba(8,51,68,.35)" stroke="#22d3ee" stroke-width="1"/>
+        <text x="874" y="155" fill="#94a3b8" font-size="8">Integration</text>
+
+        <rect x="855" y="161" width="14" height="9" rx="2" fill="rgba(136,19,55,.35)" stroke="#fb7185" stroke-width="1"/>
+        <text x="874" y="169" fill="#94a3b8" font-size="8">Monitoring</text>
+
+        <line x1="855" y1="179" x2="869" y2="179" stroke="#94a3b8" stroke-width="1"/>
+        <text x="874" y="183" fill="#94a3b8" font-size="8">Data Flow</text>
+
+        <line x1="855" y1="193" x2="869" y2="193" stroke="#fb7185" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="874" y="197" fill="#94a3b8" font-size="8">Watchdog</text>
+
+        <line x1="855" y1="207" x2="869" y2="207" stroke="#fbbf24" stroke-width="1.5"/>
+        <text x="874" y="211" fill="#94a3b8" font-size="8">Model Inference</text>
+
+      </svg>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot cyan"></div>
+          <h3>How It Works</h3>
+        </div>
+        <ul>
+          <li>• User sends input via Telegram, Email, Web, or Sheets</li>
+          <li>• Hermes Agent receives and analyzes the request</li>
+          <li>• Orchestrator delegates to specialized sub-agents</li>
+          <li>• AI model handles reasoning (your choice of provider)</li>
+          <li>• Result delivered back — report, data update, or alert</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot emerald"></div>
+          <h3>Key Features</h3>
+        </div>
+        <ul>
+          <li>• Multi-agent orchestration (parallel processing)</li>
+          <li>• Self-healing watchdog — auto-restart on failure</li>
+          <li>• Cron scheduler — runs 24/7 on autopilot</li>
+          <li>• Multi-platform delivery — Telegram, Email, Sheets</li>
+          <li>• Model-agnostic — OpenAI, Anthropic, or local Ollama</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot amber"></div>
+          <h3>Use Cases</h3>
+        </div>
+        <ul>
+          <li>• Invoice processing (PDF → Google Sheets)</li>
+          <li>• 24/7 customer support Telegram bot</li>
+          <li>• Automated market research reports</li>
+          <li>• Voice agent for order taking</li>
+          <li>• Data pipeline: scrape → clean → analyze → deliver</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="footer">
+      antwebapps.net • AI Automation Specialist • Built with Hermes Agent
+    </p>
+  </div>
+</body>
+</html>
