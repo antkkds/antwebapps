@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Hermes Dashboard — HDLE v1</title>
+<style>
+:root {
+  --bg: #0a0e14;
+  --panel-bg: #131820;
+  --border: #1e2a3a;
+  --text: #b0bec5;
+  --text-bright: #e0e6ed;
+  --accent: #39bae6;
+  --green: #7fd962;
+  --red: #f26d78;
+  --yellow: #ffb454;
+  --blue: #59c2ff;
+  --purple: #d2a6ff;
+  --gray: #4c566a;
+  --header-h: 32px;
+  --font: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  --nav-h: 48px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 12px;
+  line-height: 1.5;
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* ── TOP BAR ── */
+#topbar {
+  height: var(--header-h);
+  background: #0d1117;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 16px;
+  flex-shrink: 0;
+}
+#topbar .logo { color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: 0.5px; }
+#topbar .sep { color: var(--gray); }
+#topbar .meta { color: var(--text); font-size: 11px; }
+#topbar .meta span { color: var(--text-bright); }
+#topbar .status-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+#topbar .status-dot.live { background: var(--green); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ── MAIN LAYOUT (Desktop) ── */
+#main {
+  display: flex;
+  height: calc(100vh - var(--header-h));
+  gap: 0;
+}
+.panel {
+  background: var(--panel-bg);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.panel:last-child { border-right: none; }
+#panel-left  { width: 380px; flex-shrink: 0; }
+#panel-center { flex: 1; }
+#panel-right { width: 340px; flex-shrink: 0; }
+
+/* ── PANEL HEADER ── */
+.panel-header {
+  padding: 7px 12px;
+  background: #0d1117;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-bright);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.panel-header .count { color: var(--accent); font-size: 10px; }
+
+/* ── PANEL CONTENT ── */
+.panel-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+/* ── PARCEL CARD ── */
+.parcel-card {
+  background: #181e28;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 7px;
+  transition: border-color 0.2s;
+  position: relative;
+}
+.parcel-card:hover { border-color: #2a3a50; }
+.parcel-card.blocked { border-left: 3px solid var(--red); }
+.parcel-card.executing { border-left: 3px solid var(--blue); animation: exec-glow 2s infinite; }
+.parcel-card.complete { border-left: 3px solid var(--green); opacity: 0.8; }
+.parcel-card.failed { border-left: 3px solid var(--red); background: #1a1018; }
+@keyframes exec-glow { 0%,100%{border-color:var(--blue)} 50%{border-color:#1a3a5a} }
+
+.parcel-id { color: var(--accent); font-weight: 600; font-size: 11px; }
+.parcel-title { color: var(--text-bright); margin: 3px 0; font-size: 12px; }
+.parcel-meta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; font-size: 10px; }
+.parcel-meta .tag { padding: 1px 6px; border-radius: 3px; font-size: 9px; font-weight: 600; text-transform: uppercase; }
+.tag-tier1 { background: #1a3a20; color: var(--green); }
+.tag-tier2 { background: #3a2010; color: var(--yellow); }
+.tag-ready { background: #1a2a3a; color: var(--blue); }
+.tag-exec { background: #2a1a40; color: var(--purple); }
+.tag-complete { background: #1a3020; color: var(--green); }
+.tag-blocked { background: #301018; color: var(--red); }
+.tag-failed { background: #301018; color: var(--red); }
+
+.dep-list { margin-top: 6px; font-size: 10px; color: var(--gray); }
+.dep-list .dep-up { color: var(--yellow); }
+.dep-list .dep-down { color: var(--blue); }
+.dep-list .dep-ok { color: var(--green); }
+.dep-list .dep-missing { color: var(--red); text-decoration: line-through; }
+
+.blocker-reason {
+  margin-top: 5px;
+  padding: 4px 7px;
+  background: #201018;
+  border-radius: 3px;
+  font-size: 10px;
+  color: var(--red);
+}
+
+/* ── CENTER: LIVE PREVIEW ── */
+#preview-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #080c12;
+  position: relative;
+}
+#preview-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #fff;
+}
+#preview-placeholder {
+  color: var(--gray);
+  font-size: 13px;
+  text-align: center;
+}
+#preview-placeholder .icon { font-size: 40px; margin-bottom: 8px; }
+#preview-overlay {
+  position: absolute; top:0; left:0; right:0;
+  padding: 10px 14px;
+  background: linear-gradient(180deg, rgba(10,14,20,0.95), transparent);
+  display: flex; gap: 14px; font-size: 10px; color: var(--text);
+  pointer-events: none;
+  z-index: 5;
+}
+#preview-overlay span { color: var(--accent); }
+
+/* ── VIEWPORT TOGGLE ── */
+.viewport-group {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+}
+.viewport-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--gray);
+  font-size: 10px;
+  padding: 2px 8px;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: all 0.15s;
+  border-radius: 2px;
+  line-height: 1.4;
+}
+.viewport-btn:hover {
+  color: var(--text-bright);
+  border-color: #3a4a5a;
+}
+.viewport-btn.active {
+  background: var(--accent);
+  color: #0a0e14;
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+/* ── DEVICE FRAME ── */
+.device-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.device-frame.desktop-view {
+  width: 100%;
+  height: 100%;
+}
+.device-frame.tablet-view,
+.device-frame.mobile-view {
+  background: #0d1117;
+  border: 1px solid #1e2a3a;
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  overflow: hidden;
+  max-width: 100%;
+  max-height: 100%;
+}
+.device-frame.tablet-view { width: 768px; height: 1024px; }
+.device-frame.mobile-view {
+  width: 390px; height: 844px;
+  border-radius: 24px;
+  padding: 6px;
+}
+.device-frame .device-notch { display: none; }
+.device-frame.mobile-view .device-notch {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 18px;
+  background: #0d1117;
+  border-radius: 0 0 12px 12px;
+  z-index: 10;
+}
+.device-frame.mobile-view .device-notch::after {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: #1a2a3a;
+  border-radius: 50%;
+  margin: 5px auto 0;
+}
+
+.vp-dim { font-size: 9px; color: var(--gray); margin-left: 4px; letter-spacing: 0.3px; }
+
+/* ── RIGHT: LOG & SYNC ── */
+.log-entry {
+  padding: 5px 0;
+  border-bottom: 1px solid #1a1e28;
+  font-size: 10px;
+  display: flex;
+  gap: 8px;
+}
+.log-time { color: var(--gray); white-space: nowrap; min-width: 55px; }
+.log-type { font-weight: 600; min-width: 55px; text-transform: uppercase; font-size: 9px; }
+.log-type.val { color: var(--green); }
+.log-type.sync { color: var(--accent); }
+.log-type.err { color: var(--red); }
+.log-type.info { color: var(--text); }
+.log-msg { color: var(--text); flex: 1; }
+
+.sync-block {
+  background: #141c24;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 6px;
+  font-size: 10px;
+}
+.sync-block .sync-header { color: var(--accent); margin-bottom: 4px; font-weight: 600; }
+.sync-block .sync-detail { color: var(--gray); }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2a3040; border-radius: 3px; }
+
+/* ── DESKTOP RESPONSIVE ── */
+@media (max-width: 900px) and (min-width: 768px) {
+  #panel-right { display: none; }
+  #panel-left { width: 320px; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   MOBILE LAYOUT (< 768px)
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  body { overflow: hidden; font-size: 11px; }
+  :root { --header-h: 28px; --nav-h: 44px; }
+
+  /* Mobile single-viewport layout */
+  #main.mobile-active {
+    display: block;
+    height: calc(100vh - var(--header-h) - var(--nav-h));
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* All 3 panels stack as full-screen slides */
+  #main.mobile-active .panel {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100% !important;
+    border-right: none;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
+    will-change: transform, opacity;
+  }
+
+  /* Slide animation */
+  #main.mobile-active .panel.slide-enter {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+  #main.mobile-active .panel.slide-active {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  #main.mobile-active .panel.slide-exit {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+
+  /* Only active panel is shown */
+  #main.mobile-active .panel {
+    transform: translateX(30px);
+    opacity: 0;
+    pointer-events: none;
+  }
+  #main.mobile-active .panel.active {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Panel headers — more compact */
+  #main.mobile-active .panel-header {
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+
+  /* Mobile bottom nav */
+  #mobile-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: var(--nav-h);
+    background: #0d1117;
+    border-top: 1px solid var(--border);
+    z-index: 1000;
+    align-items: center;
+    justify-content: space-around;
+  }
+  .m-nav-btn {
+    background: none;
+    border: none;
+    color: var(--gray);
+    font-family: var(--font);
+    font-size: 9px;
+    padding: 4px 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    flex: 1;
+    transition: color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .m-nav-btn .m-icon { font-size: 16px; }
+  .m-nav-btn .m-label { text-transform: uppercase; letter-spacing: 0.5px; }
+  .m-nav-btn.active { color: var(--accent); }
+  .m-nav-btn.active .m-icon { filter: brightness(1.4); }
+
+  /* Preview in mobile mode — full screen */
+  #main.mobile-active #panel-center .panel-content {
+    padding: 0;
+  }
+  #main.mobile-active #preview-container {
+    border-radius: 0;
+    min-height: 100%;
+  }
+
+  /* In mobile: scale device frames to fit */
+  #main.mobile-active .device-frame.tablet-view {
+    width: 100%;
+    height: auto;
+    max-width: 450px;
+    aspect-ratio: 768/1024;
+    padding: 6px;
+  }
+  #main.mobile-active .device-frame.mobile-view {
+    width: 100%;
+    height: auto;
+    max-width: 220px;
+    aspect-ratio: 390/844;
+    padding: 4px;
+    border-radius: 16px;
+  }
+  #main.mobile-active .device-frame.mobile-view .device-notch {
+    width: 70px;
+    height: 14px;
+    border-radius: 0 0 8px 8px;
+  }
+  #main.mobile-active .device-frame.mobile-view .device-notch::after {
+    width: 6px;
+    height: 6px;
+    margin: 4px auto 0;
+  }
+
+  /* Parcel cards in mobile */
+  #main.mobile-active .parcel-card {
+    padding: 8px;
+    margin-bottom: 6px;
+  }
+
+  /* Viewport buttons in mobile — centered below preview */
+  #main.mobile-active .viewport-group {
+    margin: 0 auto;
+    justify-content: center;
+    padding: 4px 0;
+  }
+
+  /* Topbar compact */
+  #topbar {
+    height: var(--header-h);
+    padding: 0 8px;
+    gap: 6px;
+  }
+  #topbar .logo { font-size: 11px; }
+  #topbar .sep { display: none; }
+  #topbar .meta { font-size: 9px; }
+  #topbar .meta:nth-child(n+4):not(:last-child) { display: none; }
+
+  /* Parcel count badge */
+  .parcel-count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent);
+    color: #0a0e14;
+    font-size: 8px;
+    font-weight: 700;
+    min-width: 14px;
+    height: 14px;
+    border-radius: 7px;
+    padding: 0 4px;
+  }
+
+  /* Log entries more compact */
+  .sync-block { padding: 6px; }
+  .log-entry { padding: 3px 0; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   ORIENTATION: LANDSCAPE on mobile
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) and (orientation: landscape) {
+  #main.mobile-active .panel.active {
+    /* In landscape, panels take less vertical space since navbar + topbar eat it */
+    font-size: 10px;
+  }
+  #main.mobile-active .parcel-card { padding: 5px 8px; margin-bottom: 4px; }
+  .parcel-title { font-size: 10px; }
+  .parcel-meta { gap: 6px; }
+}
+
+/* Hide mobile nav on desktop */
+#mobile-nav { display: none; }
+
+/* ── TOUCH / SAFE AREA ── */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  #mobile-nav { padding-bottom: env(safe-area-inset-bottom); }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ TOP BAR ═══ -->
+<div id="topbar">
+  <span class="logo">⚡ HERMES DASHBOARD</span>
+  <span class="sep">|</span>
+  <span class="meta">Project: <span id="tb-project">loading…</span></span>
+  <span class="sep">|</span>
+  <span class="meta"><span class="status-dot live"></span> <span id="tb-status">LIVE</span></span>
+  <span class="sep">|</span>
+  <span class="meta">Updated: <span id="tb-time">—</span></span>
+  <span style="margin-left:auto; font-size:10px; color:var(--gray)">HDLE v1</span>
+</div>
+
+<!-- ═══ MAIN LAYOUT ═══ -->
+<div id="main">
+
+  <!-- LEFT: PARCEL QUEUE -->
+  <div class="panel active" id="panel-left">
+    <div class="panel-header">
+      📦 PARCELS <span class="count" id="parcel-count">0</span>
+    </div>
+    <div class="panel-content" id="parcel-list">
+      <div style="color:var(--gray);text-align:center;padding:20px">Waiting for execution data…</div>
+    </div>
+  </div>
+
+  <!-- CENTER: LIVE PREVIEW -->
+  <div class="panel" id="panel-center">
+    <div class="panel-header">
+      👁 PREVIEW
+      <div class="viewport-group" id="vp-group">
+        <button class="viewport-btn active" data-vp="desktop" onclick="setViewport('desktop')">🖥</button>
+        <button class="viewport-btn" data-vp="tablet" onclick="setViewport('tablet')">📱 768×1024</button>
+        <button class="viewport-btn" data-vp="mobile" onclick="setViewport('mobile')">📱 390×844</button>
+      </div>
+    </div>
+    <div id="preview-container">
+      <div id="preview-overlay">
+        <span id="pv-parcel">—</span>
+        <span id="pv-viewport" class="vp-dim">desktop</span>
+      </div>
+      <div id="preview-placeholder">
+        <div class="icon">🖥</div>
+        <div>No active preview</div>
+        <div style="font-size:10px;color:#3a4050;margin-top:4px">Start execution to see live preview</div>
+      </div>
+      <div id="device-frame" class="device-frame desktop-view">
+        <div class="device-notch"></div>
+        <iframe id="preview-frame" style="display:none"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: LOGS & SYNC -->
+  <div class="panel" id="panel-right">
+    <div class="panel-header">
+      📋 LOG & SYNC
+    </div>
+    <div class="panel-content" id="log-list">
+      <div style="color:var(--gray);text-align:center;padding:20px">Waiting for execution events…</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ MOBILE BOTTOM NAV ═══ -->
+<div id="mobile-nav">
+  <button class="m-nav-btn active" data-mview="parcels" onclick="switchMobileView('parcels')">
+    <span class="m-icon">📦</span>
+    <span class="m-label">Parcels</span>
+  </button>
+  <button class="m-nav-btn" data-mview="preview" onclick="switchMobileView('preview')">
+    <span class="m-icon">👁</span>
+    <span class="m-label">Preview</span>
+  </button>
+  <button class="m-nav-btn" data-mview="logs" onclick="switchMobileView('logs')">
+    <span class="m-icon">📋</span>
+    <span class="m-label">Logs</span>
+  </button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// HDLE v1 Dashboard Engine
+// ═══════════════════════════════════════════════════════════════
+
+const STATE_URL = new URL('state.json', window.location.href).href;
+const REFRESH_MS = 3000;
+let lastState = null;
+
+// ── MOBILE DETECTION & LAYOUT ──
+let isMobile = window.innerWidth < 768;
+let currentMobileView = 'parcels';
+
+function detectMobile() {
+  isMobile = window.innerWidth < 768;
+  const main = document.getElementById('main');
+  main.classList.toggle('mobile-active', isMobile);
+  // Always show parcels view on mobile by default
+  if (isMobile) {
+    switchMobileView('parcels', true);
+  }
+}
+
+function switchMobileView(view, silent) {
+  if (!isMobile) return;
+  currentMobileView = view;
+  const panels = {
+    parcels: document.getElementById('panel-left'),
+    preview: document.getElementById('panel-center'),
+    logs: document.getElementById('panel-right'),
+  };
+  const navBtns = document.querySelectorAll('.m-nav-btn');
+
+  // Slide transition: new panel slides in, old slides out
+  Object.entries(panels).forEach(([key, el]) => {
+    const wasActive = el.classList.contains('active');
+    const becomeActive = key === view;
+    el.classList.remove('slide-enter', 'slide-active', 'slide-exit');
+    if (becomeActive) {
+      if (!silent && !wasActive) {
+        // Animate in: start from right, end at center
+        el.classList.add('slide-enter');
+        el.classList.add('active');
+        // force reflow
+        void el.offsetWidth;
+        requestAnimationFrame(() => {
+          el.classList.remove('slide-enter');
+          el.classList.add('slide-active');
+        });
+      } else {
+        el.classList.add('active');
+        el.classList.add('slide-active');
+      }
+    } else {
+      if (!silent && wasActive) {
+        // Animate out
+        el.classList.remove('slide-active');
+        el.classList.add('slide-exit');
+        setTimeout(() => {
+          el.classList.remove('active', 'slide-exit');
+        }, 350);
+      } else {
+        el.classList.remove('active', 'slide-enter', 'slide-active', 'slide-exit');
+      }
+    }
+  });
+
+  // Update nav buttons
+  navBtns.forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mview === view);
+  });
+}
+
+// Listen for resize/orientation change
+let resizeTimeout;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    const wasMobile = isMobile;
+    detectMobile();
+    // If going from mobile to desktop, reset panel visibility
+    if (wasMobile && !isMobile) {
+      document.querySelectorAll('.panel').forEach(el => {
+        el.classList.remove('active');
+      });
+      document.getElementById('panel-left').classList.add('active');
+    }
+  }, 200);
+});
+
+// ── STATE FETCHING ──
+async function fetchState() {
+  try {
+    const resp = await fetch(STATE_URL + '?t=' + Date.now());
+    if (!resp.ok) throw new Error('state fetch failed');
+    return await resp.json();
+  } catch(e) {
+    console.warn('State fetch error:', e.message);
+    return lastState;
+  }
+}
+
+function render(state) {
+  if (!state) return;
+  lastState = state;
+
+  document.getElementById('tb-project').textContent = state.project || '—';
+  document.getElementById('tb-status').textContent = state.status || 'LIVE';
+  document.getElementById('tb-time').textContent = new Date().toLocaleTimeString();
+
+  renderParcels(state.parcels || []);
+  renderPreview(state);
+  renderLogs(state.logs || [], state.sync_events || []);
+
+  // Re-apply mobile nav badge on mobile parcel count
+  if (isMobile) {
+    const count = (state.parcels || []).length;
+    const navBtn = document.querySelector('[data-mview="parcels"]');
+    const label = navBtn ? navBtn.querySelector('.m-label') : null;
+    if (label) {
+      label.textContent = 'Parcels' + (count > 0 ? ' [' + count + ']' : '');
+    }
+  }
+}
+
+// ── PARCEL RENDERING ──
+function renderParcels(parcels) {
+  const el = document.getElementById('parcel-list');
+  document.getElementById('parcel-count').textContent = parcels.length;
+
+  if (!parcels.length) {
+    el.innerHTML = '<div style="color:var(--gray);text-align:center;padding:20px">No parcels in queue</div>';
+    return;
+  }
+
+  el.innerHTML = parcels.map(p => {
+    const statusClass = statusToClass(p.status);
+    const blocked = p.status === 'BLOCKED' || p.status === 'FAILED';
+    const exec = p.status === 'IN EXECUTION';
+    const done = p.status === 'COMPLETE';
+
+    let cardClass = 'parcel-card';
+    if (blocked) cardClass += ' blocked';
+    if (exec) cardClass += ' executing';
+    if (done) cardClass += ' complete';
+    if (p.status === 'FAILED') cardClass += ' failed';
+
+    const deps = renderDeps(p);
+    const blocker = p.blocker_reason ? `<div class="blocker-reason">⛔ ${p.blocker_reason}</div>` : '';
+
+    return `
+      <div class="${cardClass}">
+        <div class="parcel-id">${p.id} — ${p.title}</div>
+        ${p.description ? `<div class="parcel-title">${p.description}</div>` : ''}
+        <div class="parcel-meta">
+          <span class="tag tag-tier${p.tier || 1}">TIER ${p.tier || 1}</span>
+          <span class="tag tag-${statusClass}">${p.status}</span>
+          ${p.validation ? `<span style="color:var(--gray);font-size:9px">✓ ${p.validation}</span>` : ''}
+          ${p.risk ? `<span style="color:var(--yellow);font-size:9px">⚠ risk:${p.risk}</span>` : ''}
+        </div>
+        ${deps}
+        ${blocker}
+      </div>`;
+  }).join('');
+}
+
+function statusToClass(s) {
+  const map = {
+    'BACKLOG':'blocked','ANALYZED':'tier2','PARCELIZED':'tier2',
+    'DEPENDENCY VERIFIED':'tier2','READY':'ready','IN EXECUTION':'exec',
+    'VALIDATION':'exec','SYNCING DOCS':'exec','COMPLETE':'complete',
+    'BLOCKED':'blocked','FAILED':'failed','REGRESSION WARNING':'failed'
+  };
+  return map[s] || 'tier1';
+}
+
+function renderDeps(p) {
+  let html = '';
+  if (p.upstream && p.upstream.length) {
+    const items = p.upstream.map(d => {
+      const cls = d.status === 'COMPLETE' ? 'dep-ok' : (d.status === 'FAILED' ? 'dep-missing' : 'dep-up');
+      return `<span class="${cls}">↑${d.id}</span>`;
+    }).join(' ');
+    html += `<div class="dep-list">Up: ${items}</div>`;
+  }
+  if (p.downstream && p.downstream.length) {
+    const items = p.downstream.map(d => `<span class="dep-down">↓${d.id}</span>`).join(' ');
+    html += `<div class="dep-list">Down: ${items}</div>`;
+  }
+  return html;
+}
+
+// ── PREVIEW ──
+const VIEWPORTS = {
+  desktop: { w: 0, h: 0, cls: 'desktop-view', label: 'desktop' },
+  tablet:  { w: 768, h: 1024, cls: 'tablet-view', label: 'tablet 768×1024' },
+  mobile:  { w: 390, h: 844, cls: 'mobile-view', label: 'mobile 390×844' },
+};
+let currentViewport = 'desktop';
+
+function setViewport(name) {
+  currentViewport = name;
+  const vp = VIEWPORTS[name];
+  if (!vp) return;
+
+  document.querySelectorAll('.viewport-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.vp === name);
+  });
+
+  const frame = document.getElementById('device-frame');
+  Object.keys(VIEWPORTS).forEach(k => frame.classList.remove(VIEWPORTS[k].cls));
+  frame.classList.add(vp.cls);
+
+  document.getElementById('pv-viewport').textContent = vp.label;
+
+  const inner = document.getElementById('preview-frame');
+  if (name === 'desktop') {
+    inner.style.width = '';
+    inner.style.height = '';
+  } else {
+    // For mobile sreen the device frame scales with viewport, so let CSS handle it
+    if (isMobile) {
+      inner.style.width = '100%';
+      inner.style.height = '100%';
+    } else {
+      const padding = name === 'mobile' ? 12 : 16;
+      inner.style.width = vp.w - padding + 'px';
+      inner.style.height = vp.h - padding - (name === 'mobile' ? 18 : 0) + 'px';
+    }
+  }
+}
+
+function renderPreview(state) {
+  const frame = document.getElementById('preview-frame');
+  const placeholder = document.getElementById('preview-placeholder');
+  const deviceFrame = document.getElementById('device-frame');
+  const pvParcel = document.getElementById('pv-parcel');
+
+  if (state.preview_url) {
+    placeholder.style.display = 'none';
+    deviceFrame.style.display = '';
+    if (frame.src !== state.preview_url) {
+      frame.src = state.preview_url;
+    }
+    pvParcel.textContent = state.active_parcel || 'Preview active';
+    setViewport(currentViewport);
+  } else {
+    placeholder.style.display = 'block';
+    deviceFrame.style.display = 'none';
+    pvParcel.textContent = 'No active preview';
+  }
+}
+
+// ── LOGS & SYNC ──
+function renderLogs(logs, syncEvents) {
+  const el = document.getElementById('log-list');
+  const items = [];
+
+  for (const se of syncEvents.slice(-5)) {
+    items.push(`
+      <div class="sync-block">
+        <div class="sync-header">🔄 DOC SYNC — ${se.timestamp || '—'}</div>
+        <div class="sync-detail">
+          ${se.section ? 'Section: ' + se.section : ''}
+          ${se.parcels ? ' | Parcels: ' + se.parcels : ''}
+          ${se.impact ? ' | Impact: ' + se.impact : ''}
+          ${se.target ? ' | → ' + se.target : ''}
+        </div>
+      </div>`);
+  }
+
+  for (const l of logs.slice(-20)) {
+    const typeClass = l.type === 'validation' ? 'val' :
+                      l.type === 'sync' ? 'sync' :
+                      l.type === 'error' ? 'err' : 'info';
+    items.push(`
+      <div class="log-entry">
+        <span class="log-time">${l.time || '—'}</span>
+        <span class="log-type ${typeClass}">${l.type || 'INFO'}</span>
+        <span class="log-msg">${l.msg || ''}</span>
+      </div>`);
+  }
+
+  el.innerHTML = items.length ? items.join('') :
+    '<div style="color:var(--gray);text-align:center;padding:20px">No events yet</div>';
+}
+
+// ── POLLING LOOP ──
+async function poll() {
+  const state = await fetchState();
+  render(state);
+  setTimeout(poll, REFRESH_MS);
+}
+
+// ── INIT ──
+// Detect mobile on load
+detectMobile();
+
+// Handle orientation change
+if (screen && screen.orientation) {
+  screen.orientation.addEventListener('change', () => {
+    setTimeout(detectMobile, 300);
+  });
+}
+
+poll();
+</script>
+</body>
+</html>

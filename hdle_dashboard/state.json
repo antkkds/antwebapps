@@ -1,0 +1,143 @@
+{
+  "project": "hermes-dashboard",
+  "branch": "main",
+  "status": "EXECUTING",
+  "active_parcel": "P-002",
+  "preview_url": null,
+  "parcels": [
+    {
+      "id": "P-001",
+      "title": "Dashboard HTML Scaffold",
+      "description": "3-panel HDLE dashboard",
+      "tier": 1,
+      "status": "COMPLETE",
+      "upstream": [],
+      "downstream": [
+        {
+          "id": "P-002",
+          "status": "COMPLETE"
+        }
+      ]
+    },
+    {
+      "id": "P-002",
+      "title": "State API Server",
+      "description": "Python HTTP server :8082",
+      "tier": 1,
+      "status": "COMPLETE",
+      "upstream": [
+        {
+          "id": "P-001",
+          "status": "COMPLETE"
+        }
+      ],
+      "downstream": [
+        {
+          "id": "P-003",
+          "status": "COMPLETE"
+        },
+        {
+          "id": "P-005",
+          "status": "COMPLETE"
+        }
+      ]
+    },
+    {
+      "id": "P-003",
+      "title": "Google Drive Sync Engine",
+      "description": "Architecture Doc + Execution Sheet ",
+      "tier": 1,
+      "status": "COMPLETE",
+      "upstream": [
+        {
+          "id": "P-002",
+          "status": "COMPLETE"
+        }
+      ],
+      "downstream": [],
+      "validation": "Doc populated, Sheet 48 cells, Dependencies tab active"
+    },
+    {
+      "id": "P-004",
+      "title": "Real-time WebSocket Bridge",
+      "description": "WebSocket push for sub-second updates",
+      "tier": 2,
+      "status": "COMPLETE",
+      "upstream": [
+        {
+          "id": "P-002",
+          "status": "COMPLETE"
+        }
+      ],
+      "downstream": [],
+      "validation": "Validation passed, regression clear",
+      "runbook_entries": [
+        "RB-001"
+      ]
+    },
+    {
+      "id": "P-005",
+      "title": "Cloudflare Tunnel",
+      "description": "Public HTTPS via cloudflared",
+      "tier": 2,
+      "status": "COMPLETE",
+      "upstream": [
+        {
+          "id": "P-002",
+          "status": "COMPLETE"
+        }
+      ],
+      "downstream": [],
+      "validation": "Tunnel active on trycloudflare.com"
+    }
+  ],
+  "logs": [
+    {
+      "time": "19:39:55",
+      "type": "info",
+      "msg": "[webwright] Screenshot: /home/antkk/.hermes/.webwright/screenshots/20260528_193955_http_localhost_8082.png"
+    }
+  ],
+  "sync_events": [
+    {
+      "timestamp": "01:42:30",
+      "section": "Drive Folder",
+      "parcels": "P-003",
+      "impact": "hermes-dashboard folder created",
+      "target": "Google Drive"
+    },
+    {
+      "timestamp": "01:42:33",
+      "section": "Architecture Doc",
+      "parcels": "P-003",
+      "impact": "Tech stack, data flow, project isolation documented",
+      "target": "Google Docs"
+    },
+    {
+      "timestamp": "01:42:36",
+      "section": "Execution Registry",
+      "parcels": "P-003",
+      "impact": "5 parcels + 4 dependencies tracked",
+      "target": "Google Sheets"
+    },
+    {
+      "timestamp": "01:59:25",
+      "section": "Architecture",
+      "parcels": "P-004",
+      "impact": "Real-time WebSocket Bridge completed",
+      "target": "Google Drive workspace"
+    }
+  ],
+  "runbook": [
+    {
+      "id": "RB-001",
+      "time": "01:59:31",
+      "parcel": "P-004",
+      "title": "WebSocket push deferred to tier-3 — MVP uses 3s polling",
+      "status": "open",
+      "affected_parcels": [
+        "P-004"
+      ]
+    }
+  ]
+}
