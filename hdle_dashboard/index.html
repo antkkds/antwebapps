@@ -109,6 +109,8 @@ body {
 .parcel-card.executing { border-left: 3px solid var(--blue); animation: exec-glow 2s infinite; }
 .parcel-card.complete { border-left: 3px solid var(--green); opacity: 0.8; }
 .parcel-card.failed { border-left: 3px solid var(--red); background: #1a1018; }
+.parcel-card.escalated { border-left: 3px solid var(--purple); background: #1a1020; animation: escalate-pulse 2s infinite; }
+@keyframes escalate-pulse { 0%,100%{border-color:var(--purple);box-shadow:inset 2px 0 6px rgba(210,166,255,0.15)} 50%{border-color:#6a3a9a;box-shadow:inset 2px 0 6px rgba(210,166,255,0.3)} }
 @keyframes exec-glow { 0%,100%{border-color:var(--blue)} 50%{border-color:#1a3a5a} }
 
 .parcel-id { color: var(--accent); font-weight: 600; font-size: 11px; }
@@ -707,12 +709,14 @@ function renderParcels(parcels) {
     const blocked = p.status === 'BLOCKED' || p.status === 'FAILED';
     const exec = p.status === 'IN EXECUTION';
     const done = p.status === 'COMPLETE';
+    const esc = p.status === 'ESCALATED';
 
     let cardClass = 'parcel-card';
     if (blocked) cardClass += ' blocked';
     if (exec) cardClass += ' executing';
     if (done) cardClass += ' complete';
     if (p.status === 'FAILED') cardClass += ' failed';
+    if (esc) cardClass += ' escalated';
 
     const deps = renderDeps(p);
     const blocker = p.blocker_reason ? `<div class="blocker-reason">⛔ ${p.blocker_reason}</div>` : '';
@@ -738,7 +742,8 @@ function statusToClass(s) {
     'BACKLOG':'blocked','ANALYZED':'tier2','PARCELIZED':'tier2',
     'DEPENDENCY VERIFIED':'tier2','READY':'ready','IN EXECUTION':'exec',
     'VALIDATION':'exec','SYNCING DOCS':'exec','COMPLETE':'complete',
-    'BLOCKED':'blocked','FAILED':'failed','REGRESSION WARNING':'failed'
+    'BLOCKED':'blocked','FAILED':'failed','REGRESSION WARNING':'failed',
+    'ESCALATED':'blocked'
   };
   return map[s] || 'tier1';
 }
