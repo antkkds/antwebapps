@@ -255,8 +255,8 @@ Current data will be lost! Are you sure?`)){_(k.id);try{await Px(k.data);const D
           .adm-tabbar > button { white-space: nowrap; font-size: 0.75rem !important; padding: 0.3rem 0.6rem !important; }
           .adm-tabbar .adm-user { display: none; }
           .adm-stats { flex-wrap: wrap; gap: 0.3rem !important; font-size: 0.7rem !important; }
-          .adm-card { flex-direction: column !important; align-items: flex-start !important; gap: 0.3rem !important; padding: 0.5rem !important; }
-          .adm-card img { display: none; }
+          .adm-card { flex-direction: row !important; align-items: center !important; gap: 0.5rem !important; padding: 0.5rem !important; }
+          .adm-card img { width: 36px !important; height: 36px !important; display: block !important; flex-shrink: 0; }
           .adm-card-actions { align-self: flex-end; margin-top: -1.5rem; }
           .adm-list-wrap { padding: 0.75rem !important; }
           .adm-form-wrap { padding: 0.75rem !important; }
