@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DropshipFlow — 1688 → Shopee → TikTok Guide</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0f;
+      color: #e0e0e0;
+      line-height: 1.7;
+    }
+    a { color: #6c5ce7; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Navigation ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(10,10,15,0.9); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(108,92,231,0.15);
+      padding: 12px 24px; display: flex; align-items: center; justify-content: space-between;
+    }
+    nav .logo { font-size: 20px; font-weight: 700; color: #fff; }
+    nav .logo span { color: #6c5ce7; }
+    nav .badge {
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+      color: #fff; font-size: 10px; padding: 3px 10px; border-radius: 20px;
+      font-weight: 600; letter-spacing: 0.5px;
+    }
+    nav .badge.beta { background: linear-gradient(135deg, #fdcb6e, #e17055); }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 120px 24px 80px;
+      background: radial-gradient(ellipse at top, rgba(108,92,231,0.1) 0%, transparent 70%);
+    }
+    .hero h1 {
+      font-size: clamp(32px, 6vw, 64px); font-weight: 800; color: #fff;
+      line-height: 1.15; margin-bottom: 16px;
+    }
+    .hero h1 span { background: linear-gradient(135deg, #6c5ce7, #a29bfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p {
+      font-size: clamp(16px, 2vw, 20px); color: #888; max-width: 600px;
+      margin-bottom: 32px;
+    }
+    .hero .stats {
+      display: flex; gap: 32px; flex-wrap: wrap; justify-content: center;
+      margin-bottom: 40px;
+    }
+    .hero .stats div { text-align: center; }
+    .hero .stats .num { font-size: 28px; font-weight: 700; color: #fff; }
+    .hero .stats .lbl { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+    .hero .btn-group { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px; border-radius: 12px; font-size: 15px; font-weight: 600;
+      cursor: pointer; transition: all .3s; border: none; font-family: inherit;
+    }
+    .btn-primary { background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: #fff; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(108,92,231,0.3); }
+    .btn-outline { background: transparent; border: 1px solid #333; color: #ccc; }
+    .btn-outline:hover { border-color: #6c5ce7; color: #fff; }
+    .btn-success { background: linear-gradient(135deg, #00b894, #00cec9); color: #fff; }
+    .btn-success:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,184,148,0.3); }
+
+    /* ── Sections ── */
+    section { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
+    section h2 {
+      font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 40px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    section h2 .num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 12px;
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+      font-size: 18px; font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+    section h2 .tag {
+      font-size: 11px; padding: 3px 10px; border-radius: 20px;
+      background: rgba(108,92,231,0.15); color: #a29bfe; font-weight: 500;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px; padding: 24px; margin-bottom: 16px;
+      transition: all .3s;
+    }
+    .card:hover { border-color: rgba(108,92,231,0.2); background: rgba(108,92,231,0.04); }
+    .card h3 {
+      font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .card h3 .step { 
+      font-size: 11px; padding: 2px 8px; border-radius: 6px;
+      background: rgba(108,92,231,0.2); color: #a29bfe; font-weight: 500;
+    }
+    .card p, .card li { font-size: 14px; color: #999; }
+    .card ul { padding-left: 20px; margin-top: 8px; }
+    .card ul li { margin-bottom: 4px; }
+    .card .highlight {
+      background: rgba(108,92,231,0.08); border-left: 3px solid #6c5ce7;
+      padding: 12px 16px; border-radius: 0 8px 8px 0; margin-top: 12px;
+      font-size: 13px; color: #a29bfe;
+    }
+    .card .warn {
+      background: rgba(253,203,110,0.08); border-left: 3px solid #fdcb6e;
+      padding: 12px 16px; border-radius: 0 8px 8px 0; margin-top: 12px;
+      font-size: 13px; color: #fdcb6e;
+    }
+    .card .critical {
+      background: rgba(239,71,111,0.08); border-left: 3px solid #ef476f;
+      padding: 12px 16px; border-radius: 0 8px 8px 0; margin-top: 12px;
+      font-size: 13px; color: #ef476f;
+    }
+
+    /* ── Flow Diagram ── */
+    .flow {
+      display: flex; align-items: center; justify-content: center;
+      gap: 12px; flex-wrap: wrap; margin: 40px 0;
+      padding: 32px; background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06); border-radius: 20px;
+    }
+    .flow .node {
+      padding: 10px 20px; border-radius: 12px; font-size: 13px; font-weight: 600;
+      text-align: center; min-width: 80px;
+    }
+    .flow .node.source { background: rgba(0,184,148,0.15); color: #00b894; }
+    .flow .node.process { background: rgba(108,92,231,0.15); color: #a29bfe; }
+    .flow .node.dest { background: rgba(253,203,110,0.15); color: #fdcb6e; }
+    .flow .node.pay { background: rgba(239,71,111,0.15); color: #ef476f; }
+    .flow .arrow { color: #444; font-size: 18px; }
+
+    /* ── Tool Grid ── */
+    .tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+    .tool-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px; padding: 20px; text-align: center; transition: all .3s;
+    }
+    .tool-card:hover { border-color: rgba(108,92,231,0.3); transform: translateY(-2px); }
+    .tool-card .emoji { font-size: 32px; margin-bottom: 8px; }
+    .tool-card h4 { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+    .tool-card p { font-size: 12px; color: #666; }
+
+    /* ── Steps Timeline ── */
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before {
+      content: ''; position: absolute; left: 11px; top: 0; bottom: 0;
+      width: 2px; background: rgba(108,92,231,0.2);
+    }
+    .tl-item { position: relative; margin-bottom: 24px; }
+    .tl-item .dot {
+      position: absolute; left: -32px; top: 4px;
+      width: 24px; height: 24px; border-radius: 50%;
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: #fff; font-weight: 700;
+    }
+    .tl-item .dot.blue { background: linear-gradient(135deg, #0984e3, #74b9ff); }
+    .tl-item .dot.green { background: linear-gradient(135deg, #00b894, #00cec9); }
+    .tl-item .dot.orange { background: linear-gradient(135deg, #fdcb6e, #e17055); }
+    .tl-item .dot.red { background: linear-gradient(135deg, #ef476f, #ff7675); }
+
+    /* ── Price Table ── */
+    .price-card {
+      background: linear-gradient(135deg, rgba(108,92,231,0.08), rgba(162,155,254,0.04));
+      border: 1px solid rgba(108,92,231,0.2); border-radius: 20px;
+      padding: 40px; text-align: center; max-width: 400px; margin: 0 auto;
+    }
+    .price-card .price { font-size: 48px; font-weight: 800; color: #fff; }
+    .price-card .price span { font-size: 16px; color: #666; font-weight: 400; }
+    .price-card ul { text-align: left; margin-top: 24px; list-style: none; }
+    .price-card ul li { padding: 8px 0; font-size: 14px; color: #999; display: flex; align-items: center; gap: 8px; }
+    .price-card ul li::before { content: '✅'; }
+
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center; padding: 80px 24px;
+      background: radial-gradient(ellipse at center, rgba(108,92,231,0.08) 0%, transparent 70%);
+    }
+    .cta-section h2 { font-size: 32px; font-weight: 700; color: #fff; margin-bottom: 16px; justify-content: center; }
+    .cta-section p { color: #888; max-width: 500px; margin: 0 auto 32px; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center; padding: 32px; font-size: 12px; color: #444;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .flow { flex-direction: column; }
+      .flow .arrow { transform: rotate(90deg); }
+      section { padding: 40px 16px; }
+      .hero { padding: 100px 16px 60px; }
+      .price-card { padding: 24px; }
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0a0f; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ Navigation ═══ -->
+<nav>
+  <div class="logo">Dropship<span>Flow</span></div>
+  <div>
+    <span class="badge beta">BETA</span>
+  </div>
+</nav>
+
+<!-- ═══ Hero ═══ -->
+<section class="hero">
+  <h1>Dropship from <span>1688</span> to<br><span>Shopee</span> &amp; <span>TikTok Shop</span></h1>
+  <p>A complete beginner-friendly guide to start dropshipping from China's biggest marketplace to Malaysia's top platforms. No experience needed.</p>
+  <div class="stats">
+    <div><div class="num">3</div><div class="lbl">Platforms</div></div>
+    <div><div class="num">6</div><div class="lbl">Simple Steps</div></div>
+    <div><div class="num">₨0</div><div class="lbl">Start Free</div></div>
+  </div>
+  <div class="btn-group">
+    <a href="#guide" class="btn btn-primary">📖 Start the Guide</a>
+    <a href="#tools" class="btn btn-outline">🛠 What You Need</a>
+  </div>
+</section>
+
+<!-- ═══ How It Works (Flow) ═══ -->
+<section id="how">
+  <h2><span class="num">🔄</span> How It Works</h2>
+  <div class="flow">
+    <div class="node source">🇨🇳 1688.com</div>
+    <div class="arrow">→</div>
+    <div class="node process">📋 Copy Product</div>
+    <div class="arrow">→</div>
+    <div class="node dest">🛒 Shopee</div>
+    <div class="arrow">→</div>
+    <div class="node dest">🎵 TikTok Shop</div>
+    <div class="arrow">→</div>
+    <div class="node pay">💰 Profit</div>
+  </div>
+  <p style="text-align:center;color:#666;font-size:14px;">Customer buys → you order from supplier → supplier ships direct → you keep the difference</p>
+</section>
+
+<!-- ═══ The Guide ═══ -->
+<section id="guide">
+  <h2><span class="num">1</span> The Complete Guide <span class="tag">6 steps</span></h2>
+
+  <div class="timeline">
+
+    <!-- Step 1 -->
+    <div class="tl-item">
+      <div class="dot">1</div>
+      <div class="card">
+        <h3>🇨🇳 Find Products on 1688</h3>
+        <p>Go to <strong>1688.com</strong> (China's wholesale marketplace — like Taobao for bulk). Use Chrome auto-translate.</p>
+        <ul>
+          <li>Search for a product category (e.g. "phone case", "slippers", "toys")</li>
+          <li>Look for products with multiple color/size options</li>
+          <li>Check user reviews with photos</li>
+          <li><strong>Save these details:</strong> Title, description, price, images, specs, colors/sizes</li>
+        </ul>
+        <div class="highlight">💡 Pro tip: Contact the 1688 merchant and ask "Can you do dropshipping?" Most will agree — just ask.</div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="tl-item">
+      <div class="dot blue">2</div>
+      <div class="card">
+        <h3>🛒 List on Shopee <span class="step">Method A</span></h3>
+        <p>You need a <strong>Shopee seller account</strong> first (register in Shopee app → Become a Seller).</p>
+        <ul>
+          <li>Go to Seller Center → Add New Product</li>
+          <li>Upload 3+ product images (from 1688)</li>
+          <li>Copy title &amp; description from 1688 (translate to Malay/English)</li>
+          <li>Set price = cost from 1688 + shipping + your profit (30% minimum)</li>
+          <li>Click <strong>Save &amp; Publish</strong></li>
+        </ul>
+        <div class="warn">⚠️ Shopee requires business info (tax number, business registration). Register as "Individual" seller first if you don't have a company.</div>
+      </div>
+    </div>
+
+    <!-- Step 2B -->
+    <div class="tl-item">
+      <div class="dot green">3</div>
+      <div class="card">
+        <h3>🛒 Use CJ Dropshipping <span class="step">Method B (Easier)</span></h3>
+        <p>Skip manual order handling. Use CJ Dropshipping as a middle-man between 1688 and Shopee.</p>
+        <ul>
+          <li>Create a CJ Dropshipping account</li>
+          <li>Connect your Shopee store to CJ (Settings → Connect Store)</li>
+          <li>Find products in CJ's catalog (they source from 1688 for you)</li>
+          <li>Push products directly to your Shopee with 1 click</li>
+          <li>When customer orders, CJ auto-fulfills — you don't touch anything</li>
+        </ul>
+        <div class="highlight">✅ With CJ, you never handle inventory or shipping. Just focus on finding products and marketing.</div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="tl-item">
+      <div class="dot orange">4</div>
+      <div class="card">
+        <h3>🎵 List on TikTok Shop</h3>
+        <p>TikTok Shop is HUGE right now. But it has strict rules.</p>
+        <ul>
+          <li>Register at <strong>shop.tiktok.com</strong> → Choose "Individual" (no company needed)</li>
+          <li>Upload your ID and tax number → Wait for approval (hours to 1 day)</li>
+          <li><strong>CRITICAL:</strong> TikTok requires delivery within 6 business days</li>
+        </ul>
+        <div class="critical">🚨 1688 direct shipping is too slow for TikTok! You MUST use <strong>Amazon Prime</strong> as your fulfillment source — order from Amazon when customer buys from you.</div>
+        <ul>
+          <li>Set up a shipping template: Seller Shipping → Standard (7 days) → Free shipping</li>
+          <li>Create your product listing with images from 1688</li>
+          <li>Connect to <strong>AutoDS</strong> ($1 for 30 days trial) to auto-fulfill from Amazon</li>
+        </ul>
+        <div class="highlight">💡 AutoDS automatically: detects new orders → buys from Amazon → ships to customer → updates tracking. Zero manual work.</div>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="tl-item">
+      <div class="dot red">5</div>
+      <div class="card">
+        <h3>🎬 Create Content (TikTok Only)</h3>
+        <p>TikTok is a content platform. You NEED videos to get sales.</p>
+        <ul>
+          <li><strong>Option A: Record yourself</strong> — Order the product to your house, record unboxing/demo. No need to show face!</li>
+          <li><strong>Option B: AI videos</strong> — Use tools like Create UGC. Paste your product link → AI generates videos with avatars</li>
+          <li><strong>Option C: Copy what works</strong> — Find competitors' viral videos → recreate with your own product</li>
+        </ul>
+        <div class="highlight">🔥 TikTok's Affiliate Program: Creators promote your product for commission. You only pay when they sell. Free traffic!</div>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="tl-item">
+      <div class="dot green">6</div>
+      <div class="card">
+        <h3>💰 Fulfill Orders &amp; Get Paid</h3>
+        <p>When a customer buys from you:</p>
+        <ul>
+          <li><strong>Shopee (via CJ):</strong> CJ handles everything automatically</li>
+          <li><strong>Shopee (manual):</strong> Copy customer address → send to your 1688 supplier → supplier ships → paste tracking number</li>
+          <li><strong>TikTok (via AutoDS):</strong> AutoDS orders from Amazon → Amazon ships → tracking auto-updates</li>
+          <li><strong>TikTok (manual):</strong> Copy customer info → order from Amazon Prime → paste tracking</li>
+        </ul>
+        <div class="warn">⚠️ For TikTok: Always use Amazon Prime (2-day shipping) to meet TikTok's 6-day delivery requirement.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ Tools ═══ -->
+<section id="tools">
+  <h2><span class="num">🛠</span> Tools You'll Need</h2>
+  <div class="tool-grid">
+    <div class="tool-card">
+      <div class="emoji">🇨🇳</div>
+      <h4>1688.com</h4>
+      <p>China wholesale marketplace. Source products at factory prices.</p>
+    </div>
+    <div class="tool-card">
+      <div class="emoji">🛒</div>
+      <h4>Shopee Seller</h4>
+      <p>Malaysia's #1 marketplace. Register as seller in the app.</p>
+    </div>
+    <div class="tool-card">
+      <div class="emoji">🎵</div>
+      <h4>TikTok Shop</h4>
+      <p>Fastest growing platform. Register at shop.tiktok.com</p>
+    </div>
+    <div class="tool-card">
+      <div class="emoji">📦</div>
+      <h4>CJ Dropshipping</h4>
+      <p>Connects 1688 to Shopee. Auto-fulfillment.</p>
+    </div>
+    <div class="tool-card">
+      <div class="emoji">🤖</div>
+      <h4>AutoDS</h4>
+      <p>Product research + auto-fulfill for TikTok. $1 trial.</p>
+    </div>
+    <div class="tool-card">
+      <div class="emoji">🎬</div>
+      <h4>Create UGC</h4>
+      <p>AI-generated product videos. No filming needed.</p>
+    </div>
+    <div class="tool-card">
+      <div class="emoji">🧠</div>
+      <h4>DeepSeek AI</h4>
+      <p>AI brain for automation. Powers the whole pipeline.</p>
+    </div>
+    <div class="tool-card">
+      <div class="emoji">📊</div>
+      <h4>AI Surfer OS</h4>
+      <p>Monitor everything from one dashboard.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Common Mistakes ═══ -->
+<section>
+  <h2><span class="num">⚠️</span> Common Mistakes (Avoid These!)</h2>
+  
+  <div class="card">
+    <h3>❌ Using 1688 direct shipping for TikTok</h3>
+    <p>TikTok requires delivery in 6 business days. 1688 shipping takes 10-20 days. <strong>Always use Amazon Prime as middle-man for TikTok orders.</strong></p>
+  </div>
+  <div class="card">
+    <h3>❌ Not checking Amazon Prime availability</h3>
+    <p>Before listing a product on TikTok, make sure the same product exists on Amazon with Prime shipping. No Prime = no TikTok.</p>
+  </div>
+  <div class="card">
+    <h3>❌ Setting prices too low</h3>
+    <p>Your price = product cost + shipping cost + 30% minimum margin. Don't compete on price — compete on product selection and content.</p>
+  </div>
+  <div class="card">
+    <h3>❌ Posting no content on TikTok</h3>
+    <p>TikTok is not Shopee. You can't just list and wait. You MUST post videos or use the affiliate program to get creators to post for you.</p>
+  </div>
+</section>
+
+<!-- ═══ What's Next (SaaS Vision) ═══ -->
+<section id="saas">
+  <h2><span class="num">🚀</span> What's Coming: Full Automation</h2>
+  <p style="color:#888;margin-bottom:24px;">This guide is the manual process. We're building an AI-powered system that does ALL of this automatically:</p>
+  
+  <div class="card">
+    <h3>🤖 AI Agent Automation (In Development)</h3>
+    <ul>
+      <li><strong>Nanobrowser</strong> — AI Chrome extension that sees your screen and clicks like a human</li>
+      <li><strong>DeepSeek V4 Flash</strong> — AI brain that decides what to do (cheap, fast)</li>
+      <li><strong>One-click listing</strong> — Find product on 1688 → AI copies it to Shopee + TikTok automatically</li>
+      <li><strong>Auto content</strong> — AI generates product videos for TikTok</li>
+      <li><strong>Dashboard</strong> — Monitor all your listings, orders, and profits in real-time</li>
+    </ul>
+    <div class="highlight">⏳ We're testing this now. Want early access? Drop your email below.</div>
+  </div>
+</section>
+
+<!-- ═══ Coming Soon / Pricing ═══ -->
+<section class="cta-section" id="pricing">
+  <h2>💎 Coming Soon</h2>
+  <p>Full AI-powered dropship automation as a subscription service. Everything done for you.</p>
+  
+  <div class="price-card">
+    <div class="price">₨<span>Coming Soon</span></div>
+    <ul>
+      <li>AI agent runs 24/7</li>
+      <li>Auto-find winning products</li>
+      <li>Auto-list on Shopee &amp; TikTok</li>
+      <li>Auto-generate content</li>
+      <li>Real-time dashboard</li>
+      <li>Priority support</li>
+    </ul>
+    <br>
+    <a href="mailto:antkkds@gmail.com?subject=Early%20Access%20-%20DropshipFlow" class="btn btn-primary" style="margin-top:16px;">📩 Request Early Access</a>
+  </div>
+</section>
+
+<!-- ═══ Footer ═══ -->
+<footer>
+  <p>DropshipFlow &copy; 2026 — Built for Malaysian dropshippers. Not affiliated with 1688, Shopee, or TikTok.</p>
+</footer>
+
+</body>
+</html>
